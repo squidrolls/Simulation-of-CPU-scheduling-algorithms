@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="utf-8">
+	<title>进程调度模拟程序</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<!-- <script type="text/javascript" src="echarts.min.js"></script> -->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+	<link rel="stylesheet" href="app.css" />
+    <!-- <link rel="stylesheet" href="menu.css" />
+    <link rel="stylesheet" href="util.css" /> -->
+	<style type="text/css">
+
+		.allcenter *{
+			text-align: center;
+		}
+		.title{
+			width: 100%;
+			height: 60px;
+		} 
+		.division{
+   		width: 100%;
+   		height: 10px;
+  		}
+		.col-md-3{
+			width: 33%;
+			
+		}
+		.container{
+			margin: 0px 50px 0px 0px;
+			left: 50px;
+		}
+
+		.box{
+            width:100%;
+            margin:0 auto;
+            overflow:hidden;
+        }
+        .box .left{
+            width:40%;
+            float:left;
+        }
+        .box .right{
+            width:60%;
+      
+            float:left;
+        }
+        .box .left2{
+            width:30%;
+            float:left;
+        }
+        .box .right2{
+            width:70%;
+      
+            float:left;
+        }
+    
+	</style>
+</head>
+<body class="container-fluid" style="background-color:rgb(19, 20, 23);">
+<div class="title" style="height: 10%;">
+	<h2>进程调度模拟程序</h2>
+</div>
+
+<div class="box">
+    <div class="left">
+    <div class="row">
+
+	<br>
+	<h3>&emsp;&emsp;&emsp;任务列表<h3>
+</div>
+<div class="table-responsive" style="margin: 0px 0px 0px 40px;">
+	<table class="table allcenter" >
+		<thead>
+			<tr>
+				<th>进程名称</th>
+				<th>到达时间（x秒后）</th>
+				<th>预计运行时间（秒）</th>
+				<th>优先级</th>
+			</tr>
+		</thead>
+		<tbody id="table" >
+			<tr>
+				<td ><input type="text" name="name" value="j1" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="arrive_time" value="0" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="run_time" value="3" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="priority" value="3"style="background-color:rgb(223, 223, 223);"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="name" value="j2" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="arrive_time" value="2" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="run_time" value="6" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="priority" value="2" style="background-color:rgb(223, 223, 223);"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="name" value="j3" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="arrive_time" value="4" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="run_time" value="4" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="priority" value="4" style="background-color:rgb(223, 223, 223);"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="name" value="j4" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="arrive_time" value="6" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="run_time" value="5" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="priority" value="5" style="background-color:rgb(223, 223, 223);"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="name" value="j5" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="arrive_time" value="8" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="run_time" value="2" style="background-color:rgb(223, 223, 223);"></td>
+				<td><input type="text" name="priority" value="1" style="background-color:rgb(223, 223, 223);"></td>
+			</tr>
+		</tbody>
+	</table>	
+</div>
+
+<p class="text-center">
+	<button type="button" class="btn btn-default" id="add_btn">增加行</button>&emsp;
+	<button type="button" class="btn btn-default" id="remove_btn">删除行</button>&emsp;
+	<button type="button" class="btn btn-primary" id="start_btn">开始</button>&emsp;
+	<button type="button" class="btn btn-primary" id="pause_btn">暂停</button>&emsp;
+	<button type="button" class="btn btn-success" id="reset_btn">重置</button>
+</p>
+<br>
+<div class="box">
+    <!-- <div class="right" style="width: 50%;">
+		<div class="row" style="margin: 0px 0px 0px 50px; width: 100%; float:left;">
+			<div class="col-md-3" style="float: none; width: 80%;">
+				<ul class="list-group">
+					<li class="list-group-item text-center" style="background-color:rgb(77, 204, 77); "><b>运行日志</b></li>
+				</ul>
+			</div>
+
+			<pre id="run_log"  style="overflow-Y:scroll;width: 80%; height:280px;background-color:rgb(255, 255, 255); overflow: auto;" ></pre>
+		</div>
+	</div> -->
+
+	<div class="left" style="width: 100%;">
+		<div class="row" style="margin: 0px 0px 0px 0px; width: 90%; margin-left: 7%;">
+			<div class="col-md-3" style="float: none; width: 100%; margin-left: 0%;">
+				<ul class="list-group">
+					<li class="list-group-item text-center" style="background-color:rgb(77, 204, 77); "><b>实时数据</b></li>
+				</ul>
+			</div>
+			<div class="table-responsive" style="margin: 0px 0px 0px 0px; float:left;width:100%;">
+				<table class="table allcenter" >
+					<thead id="table-head">
+						<tr>
+							<th>次序</th>
+							<th>进程名称</th>
+							<th>已运行时间</th>
+							<th>剩余需求时间</th>
+							<th>调度依据</th>
+						</tr>
+					</thead>
+					<tbody id="dynamite-table" >
+						<tr>
+							<td ><input type="text" name="id" value=" " style="background-color:rgb(223, 223, 223);"></td>
+							<td ><input type="text" name="name" value=" " style="background-color:rgb(223, 223, 223);"></td>
+							<td ><input type="text" name="cputime" value=" " style="background-color:rgb(223, 223, 223);"></td>
+							<td ><input type="text" name="needtime" value=" "style="background-color:rgb(223, 223, 223);"></td>
+							<td ><input type="text" name="variety" value=" "style="background-color:rgb(223, 223, 223);"></td>
+						</tr>
+					</tbody>
+				</table>	
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+ <div class="right">
+<div class="box">
+    <div class="left2">
+    <br>
+ 	<div class="division" ></div>
+<div class="text-center" style="font-size: 20px; font-weight: normal; margin: 0px 0px 0px 10px;color:rgb(223, 223, 223);text-align:left">
+	<h3><div id="selector">算法选择：</div></h3>
+	<br>
+	<label> 
+		<input type="radio" name="process" value="Process_RR" checked="checked" size="30">时间片轮转
+	</label>
+	<br>
+	<label>
+		<input type="radio" name="process" value="Process_FCFS" size="30">先来先服务
+	</label>
+	<br>
+	<label>
+		<input type="radio" name="process" value="PP" size="30">最高优先数优先
+	</label>
+	<br>
+	<label>
+		<input type="radio" name="process" value="SPF" size="30">最短进程优先
+	</label>
+	<br>
+	<label>
+		<input type="radio" name="process" value="HRRN" size="30">高响应比优先
+	</label>
+	<br>
+	<br>
+</div>
+</div>
+
+<div class="right2">
+<div class="row">
+	<br><h3>&emsp;&emsp;&emsp;运行过程&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;现在时间：<span id="r_time"></span>&emsp;<h3>
+</div>
+<div class="row" id="running_box" style="margin: 0px 0px 0px 50px; height: 350px; color:#000000">
+	<div class="row" id="show_ui" style="width: 100%; float:left;">
+		<div class="col-md-3" >
+			<ul class="list-group" id="ready_group"  >
+				<li class="list-group-item text-center " style="background-color:rgb(77, 204, 77)"><b >Wait-就绪</b></li>
+			</ul>
+		</div>
+		<div class="col-md-3">
+			<ul class="list-group" id="run_group">
+				<li class="list-group-item text-center" style="background-color:rgb(77, 204, 77)"><b>Run-运行</b></li>
+			</ul>
+		</div>
+		<div class="col-md-3">
+			<ul class="list-group" id="finish_group">
+				<li class="list-group-item text-center" style="background-color:rgb(77, 204, 77)"><b>Finish-完成</b></li>
+			</ul>
+		</div>
+	</div>
+</div>
+</div>
+<br>
+<!-- 甘特图 -->
+<div id="container" style="height:320px; width:90%; margin-left: 5%;margin-left: 5%;">
+</div>
+
+
+<!-- 结果表格-->
+
+<div class="row" style="margin: 10px 75px;color:#000000;">
+
+	<!-- 平均周转时间  平均带权周转时间-->
+	<pre class="text-center" style="font-size: 16px; font-weight: bold" id="aver_time"></pre>
+</div>
+<script type="text/javascript" src="js/index.js"></script>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
